@@ -31,6 +31,7 @@ public class ProdutoDAO {
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 produtos.add(new Produto(
+                		rs.getInt("id"),
                         rs.getString("nome"),
                         rs.getInt("quantidade"),
                         rs.getDouble("preco"),
@@ -43,14 +44,15 @@ public class ProdutoDAO {
     }
 
     public void atualizarProduto(Produto produto) throws SQLException {
-        String sql = "UPDATE produtos SET quantidade = ?, preco = ?, data_validade = ?, categoria_id = ? WHERE nome = ?";
+        String sql = "UPDATE produtos SET nome = ?, quantidade = ?, preco = ?, data_validade = ?, categoria_id = ? WHERE id = ?";
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, produto.getQuantidade());
-            stmt.setDouble(2, produto.getPreco());
-            stmt.setString(3, produto.getDataValidade());
-            stmt.setInt(4, produto.getCategoriaId());
-            stmt.setString(5, produto.getNome()); // Usando getter para obter o nome
+        	stmt.setString(1, produto.getNome());
+        	stmt.setInt(2, produto.getQuantidade());
+            stmt.setDouble(3, produto.getPreco());
+            stmt.setString(4, produto.getDataValidade());
+            stmt.setInt(5, produto.getCategoriaId());
+            stmt.setInt(6, produto.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Erro ao atualizar o produto: " + e.getMessage());

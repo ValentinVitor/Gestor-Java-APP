@@ -1,14 +1,24 @@
 package model;
 
 public class Produto {
+	private int id;
     private String nome;
     private int quantidade;
     private double preco;
     private String dataValidade;
     private int categoriaId;  // Agora você tem o ID da categoria
 
-    // Construtor
-    public Produto(String nome, int quantidade, double preco, String dataValidade, int categoriaId) {
+    public Produto(int id, String nome, int quantidade, double preco, String dataValidade, int categoriaId) {
+    	
+    	this.id = id;
+        this.nome = nome;
+        this.quantidade = quantidade;
+        this.preco = preco;
+        this.dataValidade = dataValidade;
+        this.categoriaId = categoriaId;  // Recebe o ID da categoria
+    }
+    
+    public Produto(String nome, int quantidade, double preco, String dataValidade, int categoriaId, MaxCategoria categoria) {
     	if (nome == null || nome.isEmpty()) {
             throw new IllegalArgumentException("O nome da categoria é obrigatório.");
         }
@@ -17,6 +27,9 @@ public class Produto {
         }
     	if (preco <= 0) {
             throw new IllegalArgumentException("O preço precisa ser maior que zero.");
+        }
+    	if (quantidade > categoria.getLimiteItens()) {
+            throw new IllegalArgumentException("A quantidade do produto excede o limite permitido pela categoria.");
         }
     	
         this.nome = nome;
@@ -27,6 +40,14 @@ public class Produto {
     }
 
     // Getters e Setters
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public String getNome() {
         return nome;
     }

@@ -27,6 +27,7 @@ public class CategoriaDAO {
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 categorias.add(new MaxCategoria(
+                		rs.getInt("id"),
                         rs.getString("nome"),
                         rs.getInt("limite_itens")
                 ));
@@ -36,11 +37,12 @@ public class CategoriaDAO {
     }
 
     public void atualizarCategoria(MaxCategoria categoria) throws SQLException {
-        String sql = "UPDATE categorias SET limite_itens = ? WHERE nome = ?";
+        String sql = "UPDATE categorias SET limite_itens = ?, nome = ? WHERE id = ?";
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, categoria.getLimiteItens()); // Usando getter para limite de itens
             stmt.setString(2, categoria.getNome()); // Usando getter para o nome da categoria
+            stmt.setInt(3, categoria.getId());
             stmt.executeUpdate();
             System.out.println("Categoria atualizada com sucesso.");
         } catch (SQLException e) {
